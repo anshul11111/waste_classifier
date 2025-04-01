@@ -29,34 +29,28 @@ def generate_frames():
         if not success:
             break
         else:
-            # Convert frame to RGB (TensorFlow requires RGB)
+            
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             processed_frame = preprocess_frame(rgb_frame)
-
-            # Model Prediction
             predictions = model.predict(processed_frame)
             predicted_class = np.argmax(predictions)
             label = labels[predicted_class]
-
-            # Convert frame to grayscale and apply threshold for object detection
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             blurred = cv2.GaussianBlur(gray, (5, 5), 0)
             _, thresh = cv2.threshold(blurred, 60, 255, cv2.THRESH_BINARY)
-
-            # Find contours (potential object in the frame)
             contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             
             if contours:
-                # Find the largest contour (assumed to be the detected waste object)
+               
                 largest_contour = max(contours, key=cv2.contourArea)
                 x, y, w, h = cv2.boundingRect(largest_contour)
 
-                # Draw bounding box around detected object
+               
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
                 cv2.putText(frame, f"{label}", (x, y - 10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2, cv2.LINE_AA)
 
-            # Encode the frame for web streaming
+           
             _, buffer = cv2.imencode(".jpg", frame)
             frame_bytes = buffer.tobytes()
 
