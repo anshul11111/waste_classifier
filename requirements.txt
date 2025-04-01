@@ -1,5 +1,8 @@
-Flask
-tensorflow
-opencv-python
-numpy
-gunicorn
+Flask==3.0.3
+gunicorn==23.0.0
+opencv-python==4.10.0.84
+opencv-contrib-python==4.10.0.84
+numpy==2.0.0
+pytesseract==0.3.13
+face-recognition==1.3.0
+face_recognition_models==0.3.0
