@@ -20,6 +20,12 @@ def preprocess_frame(frame):
     frame = frame / 255.0  
     frame = np.expand_dims(frame, axis=0)  
     return frame
+
+
+
+
+
+
 def generate_frames():
     """Captures frames, predicts waste category, and overlays label with bounding box"""
     while True:
@@ -47,15 +53,33 @@ def generate_frames():
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
+
+
+
+
+
+
+
 @app.route('/')
 def index():
     """ Video Streaming Home Page """
     return render_template('index.html')
-
 @app.route('/video_feed')
 def video_feed():
     """ Return the video feed response """
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+
+
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+
+
+
