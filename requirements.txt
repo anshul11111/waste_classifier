@@ -33,6 +33,7 @@ face_recognition_models==0.3.0
 filelock==3.15.4
 firebase-admin==6.6.0
 Flask==3.0.3
+gunicorn
 flatbuffers==25.2.10
 fonttools==4.56.0
 frozenlist==1.5.0
