@@ -1,35 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waste Classification</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .video-container {
-            text-align: center;
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
+        body { text-align: center; font-family: Arial, sans-serif; }
+        #video-container, #upload-container { margin-top: 20px; }
+        img { max-width: 100%; height: auto; border: 2px solid #ddd; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1 class="text-primary">Waste Classification Live Feed</h1>
-    <div class="video-container">
-        <img src="{{ url_for('video_feed') }}" class="img-fluid border rounded shadow" alt="Live Video Feed">
+    <h1>Waste Classification System</h1>
+    <div id="video-container">
+        <h2>Live Video Feed</h2>
+        <img src="/video_feed" alt="Video Feed">
     </div>
-</div>
-
+    
+    <div id="upload-container">
+        <h2>Upload an Image</h2>
+        <input type="file" id="file-input" accept="image/*">
+        <button onclick="uploadImage()">Upload</button>
+        <h3 id="classification-result"></h3>
+        <img id="uploaded-image" style="display:none;" alt="Uploaded Image">
+    </div>
+    
+    <script>
+        function uploadImage() {
+            let fileInput = document.getElementById("file-input");
+            if (fileInput.files.length === 0) {
+                alert("Please select an image.");
+                return;
+            }
+            let file = fileInput.files[0];
+            let formData = new FormData();
+            formData.append("file", file);
+            
+            fetch("/upload", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => {
+                let label = response.headers.get("label");
+                return response.blob().then(blob => ({ blob, label }));
+            })
+            .then(({ blob, label }) => {
+                let imgElement = document.getElementById("uploaded-image");
+                imgElement.src = URL.createObjectURL(blob);
+                imgElement.style.display = "block";
+                document.getElementById("classification-result").innerText = "Classified as: " + label;
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
 </body>
 </html>
