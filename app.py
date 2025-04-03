@@ -92,3 +92,21 @@ def upload_image():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+
+# @app.route('/upload', methods=['POST'])
+# def upload_image():
+#     """ Handle image from ESP32-CAM and classify it """
+#     global latest_prediction
+#     image_bytes = request.data  # Read raw image data from ESP32
+#     image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
+
+#     if image is None:
+#         return jsonify({'error': 'Failed to process image'})
+
+#     image, label = detect_and_label(image)
+#     latest_prediction = label  # Update latest prediction
+
+#     _, buffer = cv2.imencode(".jpg", image)
+#     return Response(buffer.tobytes(), content_type='image/jpeg', headers={'label': label})
